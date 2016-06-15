@@ -1,0 +1,24 @@
+{
+  "name": "public-eye",
+  "version": "1.0.0",
+  "description": "annotator for plain texts using various dbpedia related services",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "dbpedia",
+    "spotlight",
+    "yago-aida",
+    "textrazor"
+  ],
+  "author": "Daniele Guido",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.13.1",
+    "require-all": "^2.0.0"
+  },
+  "devDependencies": {
+    "should": "^9.0.2"
+  }
+}
