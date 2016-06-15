@@ -1,16 +1,9 @@
-var localsettings,
-    _ = require('lodash');
+/*
+  Default settings.
+  Ovverride them if needed while requiring the module.
 
-// optional localsettings, e.g in order to override textrazor api
-try{
-  localsettings = require('./settings.local');
-} catch(e){
-  console.log('local module not found');
-  if(e.code !== 'MODULE_NOT_FOUND')
-    throw e;
-}
-
-var settings = _.defaultsDeep(localsettings || {}, {
+*/
+module.exports = {
   services: {
     // textrazor service
     textrazor: {
@@ -20,18 +13,12 @@ var settings = _.defaultsDeep(localsettings || {}, {
     },
     // spotlight service. Each language run in a separate port in the same server
     // cfr spotlight service to see how language implementation works.
+    // port number are given according to http://spotlight.sztaki.hu/downloads/demo/start_all.sh
     spotlight: {
-      endpoint: 'http://spotlight.dbpedia.org/rest',
-      languages: {
-        en: {
-          port: 2222
-        },
-        fr: {
-          port: 2223
-        }
+      endpoints: {
+        en: 'http://localhost:2222/rest',
+        de: 'http://localhost:2226/rest'
       }
     }
   }
-});
-console.log(settings)
-module.exports = settings;
+};
