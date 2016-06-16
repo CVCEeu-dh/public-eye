@@ -3,13 +3,16 @@
   Ovverride them if needed while requiring the module.
 
 */
+
+
 module.exports = {
   services: {
     // textrazor service
     textrazor: {
       apiKey: '', // override api key in localsettings
       endpoint: 'https://api.textrazor.com',
-      extractors: 'entities'
+      extractors: 'entities',
+      dailylimit: 500
     },
     // spotlight service. Each language run in a separate port in the same server
     // cfr spotlight service to see how language implementation works.
@@ -19,6 +22,12 @@ module.exports = {
         en: 'http://localhost:2222/rest',
         de: 'http://localhost:2226/rest'
       }
+    },
+
+    babelify: {
+      endpoint: 'https://babelfy.io/v1', // ?text={text}&lang={lang}&key={key},
+      key: '',
+      dailylimit: 1000
     }
   }
 };
