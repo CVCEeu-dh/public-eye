@@ -1,6 +1,6 @@
 {
   "name": "public-eye",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "annotator for plain texts using various dbpedia related services",
   "main": "index.js",
   "scripts": {
