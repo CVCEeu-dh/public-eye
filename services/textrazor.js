@@ -21,13 +21,13 @@ var textrazor = function(settings){
           return next(err);
 
         if(body.error)
-          return next(err, body);
+          return next(body.error, body);
         
         if(!body.response)
           return next(body.error);
         
         console.log('body', _.keys(body.response));
-        next(null, body.response.entities || []);
+        next(null, body);
       })
   }
 };

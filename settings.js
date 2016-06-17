@@ -12,7 +12,10 @@ module.exports = {
       apiKey: '', // override api key in localsettings
       endpoint: 'https://api.textrazor.com',
       extractors: 'entities',
-      dailylimit: 500
+      dailylimit: 500,
+      mapping: {
+        entities: 'entities'
+      }
     },
     // spotlight service. Each language run in a separate port in the same server
     // cfr spotlight service to see how language implementation works.

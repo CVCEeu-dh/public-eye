@@ -21,18 +21,29 @@
 
 */
 var settings = require(__dirname + '/settings'),
-    _        = require('lodash');
+    _        = require('lodash'),
+    requireall = require('require-all');
     
 
 module.exports = function(localSettings) {
-  var services = require('require-all')({
+  var services, helpers;
+
+  services = requireall({
     dirname: __dirname + '/services',
     resolve     : function (fn) {
       return fn(_.defaultsDeep(localSettings, settings));
     }
   });
 
-  return _.assign({
+  services = requireall({
+    dirname: __dirname + '/helpers',
+    resolve     : function (fn) {
+      return fn(_.defaultsDeep(localSettings, settings));
+    }
+  });
 
-  }, services);
+  return _.assign({},
+    helpers, 
+    services
+  );
 };
