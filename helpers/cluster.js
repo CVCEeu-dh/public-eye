@@ -5,6 +5,13 @@ var _ = require('lodash');
 
 module.exports = function(settings){
   return function(options) {
+    if(!options.entities)
+      throw 'helpers/cluster: no options.entities param found';
+
+    _(options.entities)
+      .groupBy(function(entity){
+
+      })
     return [];
   }
 };

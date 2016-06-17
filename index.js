@@ -27,7 +27,6 @@ var settings = require(__dirname + '/settings'),
 
 module.exports = function(localSettings) {
   var services, helpers;
-
   services = requireall({
     dirname: __dirname + '/services',
     resolve     : function (fn) {
@@ -35,7 +34,7 @@ module.exports = function(localSettings) {
     }
   });
 
-  services = requireall({
+  helpers = requireall({
     dirname: __dirname + '/helpers',
     resolve     : function (fn) {
       return fn(_.defaultsDeep(localSettings, settings));

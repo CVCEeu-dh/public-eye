@@ -13,19 +13,20 @@ var babelify = function(settings){
     }
 
     // language autodetect (iso2, e.g. 'en' instead of 'english' or 'eng')
-    if(!params.lang) {
+    if(!params.language) {
       var LD = require('languagedetect'),
           ld = new LD('iso2');
 
-      params.lang = _(ld.detect(options.text, 1))
+      params.language = _(ld.detect(options.text, 1))
         .flatten()
         .compact()
         .first();
       
-      if(!params.lang)
+      if(!params.language)
         return next('language not found');
       
-      console.log(params.lang)
+      console.log(params.language)
+      params.lang = params.language;
     }
 
     
