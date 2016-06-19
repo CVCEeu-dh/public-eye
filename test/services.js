@@ -7,24 +7,15 @@ var _             = require('lodash'),
 var text = 'First documented in the 13th century, Berlin was the capital of the Kingdom of Prussia (1701–1918), the German Empire (1871–1918), the Weimar Republic (1919–33) and the Third Reich (1933–45). Berlin in the 1920s was the third largest municipality in the world. After World War II, the city became divided into East Berlin -- the capital of East Germany -- and West Berlin, a West German exclave surrounded by the Berlin Wall from 1961–89. Following German reunification in 1990, the city regained its status as the capital of Germany, hosting 147 foreign embassies.';
     
 
-describe('index: access services', function() {
+describe('services:access', function() {
   it('should check default services availability', function(done) {
     should.equal(typeof publicEye.textrazor, 'function');
     should.equal(typeof publicEye.spotlight, 'function');
-    should.equal(typeof publicEye.babelify, 'function');
+    should.equal(typeof publicEye.babelfy, 'function');
     done();
   });
 
-  it('should check textrazor service if you add the textrazor api', function(done) {
-    publicEye.textrazor({
-      text: text,
-    }, function(err, response){
-      console.log(err, response)
-      should.not.exist(err);
-      should.exist(response.length);
-      done();
-    });
-  });
+  
 
   // it('should check spotlight service', function(done) {
   //   publicEye.spotlight.annotate({
@@ -37,24 +28,97 @@ describe('index: access services', function() {
   //   });
   // });
 
-  it('should check babelify service', function(done) {
-    publicEye.babelify({
-      text: text
-    }, function(err, response){
+  
+});
+
+describe('services:textrazor', function(){
+  it('should check textrazor service if you add the textrazor api', function(done) {
+    this.timeout(5000);
+    publicEye.textrazor({
+      text: text,
+    }, function(err, body){
+      // console.log(err, response)
       should.not.exist(err);
-      should.exist(response.length);
+      should.exist(body.response.entities.length);
       done();
     });
   });
+
+  it('should map the textrazor object correctly', function(done){
+    var t_ent = {
+      id: 34,
+      type: [ 'Place', 'PopulatedPlace', 'Country' ],
+      matchingTokens: [ 90, 91 ],
+      entityId: 'German reunification',
+      freebaseTypes: [ '/film/film_subject', '/book/book_subject', '/time/event' ],
+      confidenceScore: 25.2308,
+      wikiLink: 'http://en.wikipedia.org/wiki/German_reunification',
+      matchedText: 'German reunification',
+      freebaseId: '/m/0gl3y',
+      relevanceScore: 0.655139,
+      entityEnglishId: 'German reunification',
+      startingPos: 449,
+      endingPos: 469,
+      wikidataId: 'Q56039'
+    };
+    var ent = new require('../models/entity')(settings)(t_ent, 'textrazor');
+    // console.log(ent);
+    should.equal(ent.context.left, t_ent.startingPos);
+    should.equal(ent.context.right, t_ent.endingPos);
+    should.equal(ent.context.relevance, t_ent.relevanceScore);
+    should.equal(ent.context.confidence, t_ent.confidenceScore);
+    should.equal(ent.type.join(''),  t_ent.type.join(''));
+    should.equal(ent.slug, 'german-reunification');
+    should.equal(ent._id, 'wiki-German_reunification'); // last part of the wiki link
+    done();
+  })
 });
 
-describe('services:series', function(done){
+describe('services:babelfy', function(){
+  it('should check babelfy service', function(done) {
+    this.timeout(5000);
+    publicEye.babelfy({
+      text: text
+    }, function(err, body){
+      should.not.exist(err);
+      should.exist(body.length); // a list of entities
+      done();
+    });
+  });
+  it('should map the babelfy object correctly (should provide context)', function(done){
+    var b_ent = {
+      "tokenFragment":{
+        "start":4, 
+        "end":4
+      },
+      "charFragment":{"start":19, "end":30},
+      "babelSynsetID":"bn:00010388n",
+      "DBpediaURL":"http://dbpedia.org/resource/Multilingualism",
+      "BabelNetURL":"http://babelnet.org/rdf/s00010388n",
+      "score":0.9,
+      "coherenceScore":0.5,
+      "globalScore":0.06428571428571428,
+      "source":"BABELFY"
+    };
+    var ent = new require('../models/entity')(settings)(b_ent, 'babelfy', 'BabelNet is both a multilingual encyclopedic dictionary and a semantic network');
+    // console.log(ent);
+    should.equal(ent.context.left, b_ent.charFragment.start);
+    should.equal(ent.context.right, b_ent.charFragment.end + 1);
+    should.equal(ent.context.relevance, b_ent.globalScore);
+    should.equal(ent.context.confidence, b_ent.coherenceScore);
+    should.equal(ent.slug, 'multilingual');
+    should.equal(ent._id, 'wiki-Multilingualism'); // last part of the wiki link
+    done();
+  })
+})
+
+describe('services:series', function(){
   // it('should check our wonderful series service', function(done) {
 
   //   publicEye.series({
   //     services:[
   //       'textrazor',
-  //       'babelify'
+  //       'babelfy'
   //     ],
   //     language: 'en',
   //     text: text
@@ -67,15 +131,17 @@ describe('services:series', function(done){
   // });
 
   it('should detect the language automatically if it is not given', function(done) {
+    this.timeout(5000);
     publicEye.series({
       services:[
         'textrazor',
-        'babelify'
+        'babelfy'
       ],
       text: text
     }, function(err, response){
       should.not.exist(err);
       should.equal(response.language, 'en');
+      // console.log(response.entities)
       done();
     });
   });

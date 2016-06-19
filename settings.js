@@ -13,7 +13,7 @@ module.exports = {
       endpoint: 'https://api.textrazor.com',
       extractors: 'entities',
       dailylimit: 500,
-      // mapping this service REST structure to ours
+      // mapping this service REST structure to ours, cfr. https://www.textrazor.com/docs/rest#Entity
       entities: 'response.entities',
       mapping: {
         type: 'type',
@@ -23,7 +23,9 @@ module.exports = {
         wiki: 'wikiLink',
         context: {
           left: 'startingPos',
-          right: 'endingPos'
+          right: 'endingPos',
+          relevance: 'relevanceScore', // 0.0 to 1.0
+          confidence: 'confidenceScore' // 0.5 to 10.0 (should be transformed to 0.0 - 1.0 @todo)
         }
       }
     },
@@ -34,21 +36,26 @@ module.exports = {
       endpoints: {
         en: 'http://localhost:2222/rest',
         de: 'http://localhost:2226/rest'
-      }
+      },
+      // @todo mapping for spotlight service
+      mapping: {}
     },
 
-    babelify: {
-      endpoint: 'https://babelfy.io/v1', // ?text={text}&lang={lang}&key={key},
+    babelfy: {
+      endpoint: 'https://babelfy.io/v1/disambiguate', // ?text={text}&lang={lang}&key={key},
       key: '',
       match: 'EXACT_MATCHING',
       extAIDA: true,
       dailylimit: 1000,
+      rightOffset: 1,
       mapping: {
         dbpedia: 'DBpediaURL',
         name: 'rr',
         context: {
           left: 'charFragment.start',
-          right: 'charFragment.end'
+          right: 'charFragment.end',
+          relevance: 'globalScore',
+          confidence: 'coherenceScore'
         }
       }
     }

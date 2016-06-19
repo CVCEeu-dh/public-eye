@@ -7,60 +7,77 @@ var path     = require('path'),
   instantioate with Entity()
   Noramlize the entity to fit our annotation model according to the rules specified in settings.services[service].mapping
 */
-module.exports = function(properties, service){
-  var self = this,
-      generic = {
-        name: '',
-        type: [],
-        dbpedia: null,
-        wiki: null,// the final part
-        wikidata: null,
-        slug: false,
-        context: // context
-        {
-          left: -1,
-          right: -1
-        }
-      };
-
-  // normalize according to service, if provided
-  if(!service)
-    self.props = _.defaultDeep(properties, context);
-  else{
-    function loopProperties(obj, depth){
-      var _obj = {},
-          depth = depth||0;
-      for(var i in obj){
-        // console.log(i, _.isPlainObject(obj[i]), depth)
-        if(_.isPlainObject(obj[i]))
-          _obj[i] = loopProperties(obj[i], depth+1);
-        else{
-          // console.log(' get::::', obj[i])
-          _obj[i] = _.get(properties, obj[i]);
-        }
+module.exports = function(settings){
+  // loop through properties mapping (cfr. settings.services.mapping)
+  function loopProperties(props, mapping, depth){
+    var _props = {},
+        depth = depth||0;
+    for(var i in mapping){
+      // console.log(i, _.isPlainObject(mapping[i]), depth)
+      if(_.isPlainObject(mapping[i]))
+        _props[i] = loopProperties(props, mapping[i], depth+1);
+      else{
+        // console.log(' get::::', mapping[i])
+        _props[i] = _.get(props, mapping[i]);
       }
-      return _obj;
     }
+    return _props;
+  };
+
+  return function(properties, service, text){
+    var self = this,
+        generic = {
+          name: '',
+          type: [],
+          dbpedia: null,
+          wiki: null,// the final part
+          wikidata: null,
+          slug: false,
+          context: // context
+          {
+            left: -1,
+            right: -1
+          }
+        };
+    // console.log(properties)
+    // normalize according to service, if provided
+    if(!service)
+      throw 'service param not found';// self.props = _.defaultDeep(properties, context);
     
-    self.props = _.defaults(loopProperties(settings.services[service].mapping), generic);
-  }
+    // use loopProperties in order to loop through properties mappings, service specific.
+    self.props = _.defaults(loopProperties(properties, settings.services[service].mapping), generic);
+    
+    // correct rightmost cut (e.g. babelfy service)
+    if(settings.services[service].rightOffset)
+      self.props.context.right += settings.services[service].rightOffset;
+    
+    if(settings.services[service].leftOffset)
+      self.props.context.right += settings.services[service].leftOffset;
+    
+    if(text && _.isEmpty(self.props.matchedText)){ // just cut text
+      self.props.matchedText = text.substring(self.props.context.left, self.props.context.right)
+      if(!self.props.name){
+        self.props.name = self.props.matchedText;
+      }
+    };
 
-  // add the slug field
-  if(self.props.slug === false){
-    self.props.slug = helpers.slugify(self.props.name);
-  }
+    // add the slug field
+    if(self.props.slug === false){
+      self.props.slug = helpers.slugify(self.props.name);
+    }
 
-  // add an uniqueid (e.g. if wikidata use wikidata, else dbpedia last part)
-  self.props._id = _([
-    self.props.dbpedia? 'wiki-' + path.basename(self.props.dbpedia): null,
-    self.props.wiki? 'wiki-' + path.basename(self.props.wiki): null,
-    self.props.wikidata? 'wikidata-' +  self.props.wikidata: null,
-    self.props.slug
-  ])
-    .compact()
-    .first();
+    // add an uniqueid (e.g. if wikidata use wikidata, else dbpedia last part)
+    self.props._id = _([
+      self.props.dbpedia? 'wiki-' + path.basename(self.props.dbpedia): null,
+      self.props.wiki? 'wiki-' + path.basename(self.props.wiki): null,
+      self.props.wikidata? 'wikidata-' +  self.props.wikidata: null,
+      self.props.slug
+    ])
+      .compact()
+      .first();
 
-  // apply mapping if service is specified
+    // apply mapping if service is specified
 
-  return self.props;
+    return self.props;
+  };
 };

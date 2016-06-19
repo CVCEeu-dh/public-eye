@@ -1,9 +1,9 @@
 var request = require('request'),
     _       = require('lodash');
 
-var babelify = function(settings){
+var babelfy = function(settings){
   return function(options, next) {
-    var params   = _.defaults(options, _.get(settings,'services.babelify', {})),
+    var params   = _.defaults(options, _.get(settings,'services.babelfy', {})),
         required = ['endpoint', 'text'],
         missing  = _.difference(required, _.keys(params));
 
@@ -25,7 +25,6 @@ var babelify = function(settings){
       if(!params.language)
         return next('language not found');
       
-      console.log(params.language)
       params.lang = params.language;
     }
 
@@ -35,7 +34,7 @@ var babelify = function(settings){
         headers: {
           'Accept':  'application/json'
         },
-        url: params.endpoint + '/disambiguate',
+        url: params.endpoint,
         json: true,
         form: params
       }, function (err, res, body) {
@@ -46,4 +45,4 @@ var babelify = function(settings){
   }
 };
 
-module.exports = babelify;
+module.exports = babelfy;

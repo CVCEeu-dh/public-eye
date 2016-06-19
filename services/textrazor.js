@@ -26,7 +26,7 @@ var textrazor = function(settings){
         if(!body.response)
           return next(body.error);
         
-        console.log('body', _.keys(body.response));
+        // console.log('body', _.keys(body.response));
         next(null, body);
       })
   }
