@@ -2,7 +2,9 @@
 NodeJS package for entity disambiguation and text annotation.
 
 ## About
-A lot of named entity disambiguation services are available on the web. They all expose a solid REST api and they all disambiguate on top of DBpedia resources. *PublicEye* is a tiny library aiming at harmonize the different annotation results, and it is able to automatically detect the language of the given text thanks to the languagedetect library.
+A lot of named entity disambiguation services are available on the web. They all expose a solid REST api and they all disambiguate on top of DBpedia resources. [PublicEye](https://github.com/CVCEeu-dh/public-eye) is a tiny open source library aiming at harmonize the different annotation results, and it is able to automatically detect the language of the given text thanks to the awesome [languagedetect](https://www.npmjs.com/package/languagedetect) library.
+
+
 
 ## Installation
 	npm install public-eye --save
