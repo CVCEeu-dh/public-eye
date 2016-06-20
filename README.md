@@ -33,28 +33,11 @@ publicEye.series({
         'babelfy'
       ],
       text: 'First documented in the 13th century, Berlin was the capital of the Kingdom of Prussia (1701–1918), the German Empire (1871–1918), the Weimar Republic (1919–33) and the Third Reich (1933–45)'
-    }, function(err, entities){
-    	// ... 
+    }, function(err, response){
+    	// ... response.entities 
+    	
     })
 
-```
-
-
-``` javascript
-var publicEye = require('public-eye')({ 
-	
-publicEye.series({
-      services:[
-        'textrazor',
-        'babelfy'
-      ],
-      text: text
-    }, function(err, response){
-      should.not.exist(err);
-      should.equal(response.language, 'en');
-      // console.log(response.entities)
-      done();
-    });
 ```
 
 The usage type for [textrazor](http://textrazor.com) entity disambiguation:
