@@ -7,7 +7,7 @@ module.exports ={
     textrazor: {
       apiKey: 'your-api-key', // override api key in localsettings
     },
-    babelnet:{
+    babelfy:{
       key: 'your-api-key'
     }
   },

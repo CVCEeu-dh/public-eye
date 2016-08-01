@@ -29,10 +29,9 @@ module.exports = function(settings){
     var helpers = require('../helpers/common')(settings),
         cluster = require('../helpers/cluster')(settings);
 
-    // for each services:
+    // for each services in options.services:
     async.series(_.map(options.services, function(service){
       return function(callback){
-        // console.log(service)
         var fn = require('./'+service)(settings);
 
         fn({

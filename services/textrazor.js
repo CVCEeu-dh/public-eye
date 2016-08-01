@@ -1,4 +1,5 @@
 var request = require('request'),
+    ISOcode = require('../ISOcodes'),
     _       = require('lodash');
 
 var textrazor = function(settings){
@@ -10,6 +11,12 @@ var textrazor = function(settings){
     if(missing.length)
       return next('args missing', missing);
 
+    if(options.language){
+      // get the current translation
+      params.languageOverride = _.get(_.find(ISOcode, {'ISO-639-1': options.language}),'ISO-639-2', options.language);
+    }
+
+    // console.log(params)
     // the request itself
     request
       .post({
