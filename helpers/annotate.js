@@ -31,7 +31,7 @@ module.exports = function(settings){
       // get the leftmost or rightmost for this splitpoint
       var ls = _.uniq(_.map(options.points.filter(function(d) {
         return d.context.left == splitpoints[i] || d.context.right == splitpoints[i + 1]
-      }), 'id'));
+      }), '_id'));
       
       chunks.push({
         s: options.content.slice(splitpoints[i], splitpoints[i + 1]),
