@@ -15,7 +15,6 @@ describe('services:access', function() {
     done();
   });
 
-  
 
   // it('should check spotlight service', function(done) {
   //   publicEye.spotlight.annotate({
@@ -31,9 +30,62 @@ describe('services:access', function() {
   
 });
 
+
+describe('services:stanfordNER', function(){
+  it('should check stanford NER availability via web service', function(done){
+    publicEye.stanfordNER({
+      text: text
+    }, function(err, body){
+      should.not.exist(err);
+      should.exist(body.raw)
+      // check settings.js, section stanfordNER.mapping
+      should.exist(body._parsed.length)
+      should.exist(body._parsed[0].index)
+      should.exist(body._parsed[0][1])
+      should.exist(body._parsed[0][2])
+      done();
+    });
+  });
+
+  it('should map the stanfordNER object correctly', function(done){
+    // this is the result of a call agains ner-server.sh (copy https://raw.githubusercontent.com/niksrc/ner/master/ner-server.sh)
+    // java -mx1000m -cp "$scriptdir/stanford-ner.jar:$scriptdir/lib/*" edu.stanford.nlp.ie.NERServer  -loadClassifier $scriptdir/classifiers/english.muc.7class.distsim.crf.ser.gz -port 9191 -outputFormat inlineXML
+    //
+    // Example:
+    //
+    // [ 
+    //   '<DATE>13th century</DATE>',
+    //   'DATE',
+    //   '13th century',
+    //   index: 24,
+    //   input: 'First documented in the <DATE>13th century</DATE>, <LOCATION>Berlin</LOCATION> was the capital of the Kingdom of <LOCATION>Prussia</LOCATION> (1701–<DATE>1918</DATE>), the German Empire (1871–<DATE>1918</DATE>), the <LOCATION>Weimar</LOCATION> Republic (<DATE>1919</DATE>–33) and the Third <PERSON>Reich</PERSON> (<DATE>1933</DATE>–45). <LOCATION>Berlin</LOCATION> in the <DATE>1920s</DATE> was the third largest municipality in the world. After World War II, the city became divided into <LOCATION>East Berlin</LOCATION> -- the capital of <LOCATION>East Germany</LOCATION> -- and <LOCATION>West Berlin</LOCATION>, a West German exclave surrounded by the <LOCATION>Berlin</LOCATION> Wall from <DATE>1961</DATE>–89. Following German reunification in <DATE>1990</DATE>, the city regained its status as the capital of <LOCATION>Germany</LOCATION>, hosting 147 foreign embassies.' 
+    // ]
+    
+    
+
+    var t_ent = {
+      0: '<DATE>13th century</DATE>',
+      1: 'DATE', // i.e; the type
+      2: '13th century',
+      index: 24
+    };
+
+    var ent = new require('../models/entity')(settings)(t_ent, 'stanfordNER');
+    should.equal(ent.context.left, t_ent.index);
+    should.equal(ent.context.right, t_ent.index + t_ent[2].length);
+    should.equal(ent.type.join(''),  [t_ent[1]].join('').toLowerCase());
+    done();
+  })
+})
+
 describe('services:textrazor', function(){
   it('should check textrazor service if you add the textrazor api', function(done) {
-    this.timeout(5000);
+    if(!publicEye.settings.services.textrazor.apiKey){
+      console.warn("  ... skipping, you didn't set textrazor credentials in `test/settings.local.js`")
+      done();
+      return;
+    }
+    this.timeout(10000);
     publicEye.textrazor({
       text: text,
     }, function(err, body){
@@ -76,7 +128,12 @@ describe('services:textrazor', function(){
 
 describe('services:babelfy', function(){
   it('should check babelfy service', function(done) {
-    this.timeout(5000);
+    if(!publicEye.settings.services.textrazor.apiKey){
+      console.warn("  ... skipping, you didn't set textrazor credentials in `test/settings.local.js`")
+      done();
+      return;
+    }
+    this.timeout(10000);
     publicEye.babelfy({
       text: text
     }, function(err, body){
@@ -135,13 +192,13 @@ describe('services:series', function(){
     publicEye.series({
       services:[
         'textrazor',
-        'babelfy'
+        'babelfy',
+        'stanfordNER'
       ],
       text: text
     }, function(err, response){
       should.not.exist(err);
       should.equal(response.language, 'en');
-      // console.log(response.entities)
       done();
     });
   });

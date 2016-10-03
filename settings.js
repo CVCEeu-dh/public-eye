@@ -58,6 +58,21 @@ module.exports = {
           confidence: 'coherenceScore'
         }
       }
+    },
+
+    // local stanfordNER using the node ner library. Override this configs in your local project if needed
+    stanfordNER: {
+      port: 9191,
+      host: 'localhost',
+
+      entities: '_parsed',
+      mapping: {
+        type: '1',
+        name: '2',
+        context: {
+          left: 'index'
+        }
+      }
     }
   }
 };

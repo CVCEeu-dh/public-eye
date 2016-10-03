@@ -25,28 +25,34 @@ module.exports = function(settings){
   };
 
   return function(properties, service, text){
-    var self = this,
-        generic = {
-          name: '',
-          type: [],
-          dbpedia: null,
-          wiki: null,// the final part
-          wikidata: null,
-          slug: false,
-          context: // context
-          {
-            left: -1,
-            right: -1
-          }
-        };
+    var self = this;
     // console.log(properties)
     // normalize according to service, if provided
     if(!service)
       throw 'service param not found';// self.props = _.defaultDeep(properties, context);
-    
+
     // use loopProperties in order to loop through properties mappings, service specific.
-    self.props = _.defaults(loopProperties(properties, settings.services[service].mapping), generic);
+    self.props = _.defaults(loopProperties(properties, settings.services[service].mapping), {
+      name: '',
+      type: [],
+      dbpedia: null,
+      wiki: null,// the final part
+      wikidata: null,
+      slug: false,
+      context: // context
+      {
+        left: -1,
+        right: -1
+      }
+    });
     
+    // to be refactored
+    if(service == 'stanfordNER'){
+      console.log(properties);
+      self.props.context.right = self.props.context.left + self.props.name.length;
+      self.props.type = [self.props.type.toLowerCase()]
+    }
+
     // correct rightmost cut (e.g. babelfy service)
     if(settings.services[service].rightOffset)
       self.props.context.right += settings.services[service].rightOffset;
