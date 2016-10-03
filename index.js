@@ -41,8 +41,11 @@ module.exports = function(localSettings) {
     }
   });
 
-  return _.assign({},
-    helpers, 
+  return _.assign(
+    {
+      settings: localSettings
+    },
+    helpers,
     services
   );
 };
