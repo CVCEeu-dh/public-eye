@@ -1,6 +1,6 @@
 {
   "name": "public-eye",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "annotator for plain texts using various dbpedia related services",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,9 @@
     "dbpedia",
     "spotlight",
     "yago-aida",
-    "textrazor"
+    "textrazor",
+    "stanfordNER",
+    "ner"
   ],
   "author": "Daniele Guido",
   "license": "ISC",
