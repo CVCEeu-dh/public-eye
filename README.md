@@ -134,4 +134,43 @@ Usage type for [StanfordNER](http://nlp.stanford.edu/software/CRF-NER.shtml), cf
     });
 ```
 
+Usage type for [geonames search](http://www.geonames.org/export/geonames-search.html):
+
+```javascript
+
+  var publicEye   = require('public-eye')({
+    services: {
+      geonames: {
+        username: 'your-username'
+      }
+    }
+  });
+
+  publicEye.geonames({
+    text: 'Osh' // a city in Kyrgyzstan
+  }, function(err, body){
+      // console.log(body.geonames)
+      // => [ 
+      //      { adminCode1: '08',
+      //        lng: '72.7985',
+      //        geonameId: 1527534,
+      //        toponymName: 'Osh',
+      //        countryId: '1527747',
+      //        fcl: 'P',
+      //        population: 200000,
+      //        countryCode: 'KG',
+      //        name: 'Osh',
+      //        fclName: 'city, village,...',
+      //        countryName: 'Kyrgyzstan',
+      //        fcodeName: 'seat of a first-order administrative division',
+      //        adminName1: 'Osh',
+      //        lat: '40.52828',
+      //        fcode: 'PPLA' 
+      //       },
+      //       ...
+      //     ]
+  });
+
+```
+
 More services to come, stay tuned!

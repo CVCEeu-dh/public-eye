@@ -14,6 +14,10 @@ module.exports ={
     stanfordNER: {
       port: 9191,
       host: 'localhost'
+    },
+    geonames: {
+      username: 'demo', // override with yours
+      type: 'json'
     }
   },
 };

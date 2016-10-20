@@ -73,6 +73,15 @@ module.exports = {
           left: 'index'
         }
       }
+    },
+
+    // OTHER SERVICES
+    geonames: {
+      endpoint: 'http://api.geonames.org/search', // substitute here if needed. It can be override
+      username: 'demo', // override in your local settings
+      type: 'json',
+      entities: 'geonames',
+      maxRows: 5
     }
   }
 };

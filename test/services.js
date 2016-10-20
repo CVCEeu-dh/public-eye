@@ -169,6 +169,28 @@ describe('services:babelfy', function(){
   })
 })
 
+
+describe('services:geonames', function(){
+  it('should check geonames service', function(done) {
+    if(!publicEye.settings.services.geonames.username){
+      console.warn("  ... skipping, you didn't set geonames username credentials in `test/settings.local.js`")
+      done();
+      return;
+    }
+    this.timeout(10000);
+    publicEye.geonames({
+      text: 'Osh' // a city in Kyrgyzstan
+    }, function(err, body){
+      // console.log(body)
+      should.not.exist(err);
+      should.exist(body.geonames.length); // a list of entities
+      should.exist(body.totalResultsCount);
+      done();
+    });
+  });
+})
+
+
 describe('services:series', function(){
   // it('should check our wonderful series service', function(done) {
 
