@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - 6.5.0
+before_script:
+  cp test/settings.local.example.js test/settings.local.js
+
+script:
+  mocha -g 'helpers:'
