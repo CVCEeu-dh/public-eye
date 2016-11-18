@@ -10,6 +10,11 @@ module.exports = function(settings){
     if(missing.length)
       return next('args missing', missing);
 
+    if(params.text.trim().length == 0){
+      next('empty params.text');
+      return;
+    }
+
     ner.get({
         port: params.port || 9191,
         host: params.host || 'localhost'

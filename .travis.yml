@@ -5,4 +5,4 @@ before_script:
   cp test/settings.local.example.js test/settings.local.js
 
 script:
-  mocha -g 'helpers:'
+  mocha -g 'services:access'
