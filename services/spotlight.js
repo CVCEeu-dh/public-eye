@@ -24,19 +24,19 @@ var spotlight = function(settings){
       if(!params.language)
         return next('language not found');
       
-      console.log(params.language)
+      console.log('languages found:', params.language)
     }
 
     if(!params.endpoints[params.language]){
       return next('endpoint not found for the language: '+params.language);
     }
-    console.log('connecting to:', params.endpoints[params.language] + '/annotate')
+    console.log('connecting to:', params.endpoints[params.language])
     request
       .post({
         headers: {
           'Accept':  'application/json'
         },
-        url: params.endpoints[params.language] + '/annotate',
+        url: params.endpoints[params.language],
         json: true,
         form: params
       }, function (err, res, body) {

@@ -49,8 +49,15 @@ module.exports = function(settings){
     // to be refactored
     if(service == 'stanfordNER'){
       // console.log(properties);
-      self.props.context.right = self.props.context.left + self.props.name.length;
+      self.props.context.right = +self.props.context.left + self.props.name.length;
       self.props.type = [self.props.type.toLowerCase()]
+    }
+
+    if(service == 'spotlight'){
+      // console.log(properties);
+      self.props.context.left = +self.props.context.left;
+      self.props.context.right = self.props.context.left + self.props.name.length;
+      self.props.type = self.props.type.toLowerCase().split(',')
     }
 
     // correct rightmost cut (e.g. babelfy service)

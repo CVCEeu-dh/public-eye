@@ -31,6 +31,50 @@ describe('services:access', function() {
 });
 
 
+describe('services:spotlight', function(){
+  // it('should check spotlight availability via web service', function(done){
+  //   if(!publicEye.settings.services.spotlight){
+  //     console.warn("  ... skipping, you didn't set spotlight credentials in `test/settings.local.js`")
+  //     done();
+  //     return;
+  //   }
+  //   this.timeout(10000);
+
+  //   publicEye.spotlight({
+  //     text: text
+  //   }, function(err, body){
+  //     should.not.exist(err);
+  //     should.exist(body['@text'])
+  //     should.exist(body.Resources);
+  //     done();
+  //   });
+  // });
+  it('should map the spotlight object correctly', function(done){
+    var s_ent = { 
+      "@URI": "http://dbpedia.org/resource/Berlin",
+      "@support": "46739",
+      "@types": "Schema:Place,DBpedia:Place,DBpedia:PopulatedPlace,DBpedia:Region,Schema:AdministrativeArea,DBpedia:AdministrativeRegion",
+      "@surfaceForm": "Berlin",
+      "@offset": "38",
+      "@similarityScore": "0.9998758570579835",
+      "@percentageOfSecondRank": "6.324471425147983E-5" 
+    };
+    var ent = new require('../models/entity')(settings)(s_ent, 'spotlight');
+    // console.log(s_ent['@types']);
+    should.equal('Berlin', text.substring(ent.context.left, ent.context.right));
+
+    // should.equal(ent.context.left, t_ent.startingPos);
+    // should.equal(ent.context.right, t_ent.endingPos);
+    // should.equal(ent.context.relevance, t_ent.relevanceScore);
+    // should.equal(ent.context.confidence, t_ent.confidenceScore);
+    should.equal(ent.type.join(','),  s_ent['@types'].toLowerCase());
+    should.equal(ent.slug, 'berlin');
+    // should.equal(ent._id, 'wiki-German_reunification'); // last part of the wiki link
+    done();
+  })
+});
+
+
 describe('services:stanfordNER', function(){
   it('should check stanford NER availability via web service', function(done){
     publicEye.stanfordNER({

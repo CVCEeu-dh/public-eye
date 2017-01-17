@@ -31,14 +31,29 @@ module.exports = {
     },
     // spotlight service. Each language run in a separate port in the same server
     // cfr spotlight service to see how language implementation works.
+    // Demo of spotlight annotation is availbale at: https://dbpedia-spotlight.github.io/demo/
     // port number are given according to http://spotlight.sztaki.hu/downloads/demo/start_all.sh
     spotlight: {
+      confidence:0.5,
+      support:0,
+      spotter:'Default',
+      disambiguator:'Default',
+      policy:'whitelist',
       endpoints: {
-        en: 'http://localhost:2222/rest',
-        de: 'http://localhost:2226/rest'
+        en: 'http://www.dbpedia-spotlight.com/en/annotate',
+        // in this case, the english demo is given. uncomment the following to get local stuff
+        // en: 'http://localhost:2222/rest',
+        // de: 'http://localhost:2226/rest'
       },
-      // @todo mapping for spotlight service
-      mapping: {}
+      entities: 'Resources',
+      mapping: {
+        name: '@surfaceForm',
+        type: '@types',
+        wiki: '@URI',
+        context:{
+          left: '@offset'
+        }
+      }
     },
 
     babelfy: {
