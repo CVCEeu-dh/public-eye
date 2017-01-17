@@ -1,8 +1,8 @@
 # Public-Eye
 ![Build Status](https://travis-ci.org/CVCEeu-dh/public-eye.svg?branch=master)
 
-A lot of named entity disambiguation services, like [dpedia spotlight](https://dbpedia-spotlight.github.io/demo/), are now available on the web. They all expose a solid REST api and they all disambiguate on top of DBpedia resources. They have different output format, though, this is where [Public-Eye](https://github.com/CVCEeu-dh/public-eye) comes in handy. 
-Public-Eye is a tiny open source library aiming at **harmonize** the different annotation results, and gives you access to language detection automatically thanks to the awesome [languagedetect](https://www.npmjs.com/package/languagedetect) library.
+A lot of named entity disambiguation services, like [dpedia spotlight](https://dbpedia-spotlight.github.io/demo/), are now available on the web. They all expose a solid REST api and they all disambiguate on top of DBpedia resources. They have different output formats, though, and this is where [Public-Eye](https://github.com/CVCEeu-dh/public-eye) comes in handy. 
+Public-Eye is a tiny open source library that aims to **harmonize** the different annotation results and gives you access to language detection automatically thanks to the awesome [languagedetect](https://www.npmjs.com/package/languagedetect) library.
 
 ```javascript
 // minimalistic example with spotlight
@@ -12,7 +12,7 @@ var text = 'First documented in the 13th century, Berlin was the capital of the 
 
 publicEye.spotlight({
   text: text
-}, (err, ressponse) => {
+}, (err, response) => {
   // ... response.Resources gives you a list of
   // {
   //    ...
@@ -32,8 +32,8 @@ publicEye.spotlight({
 ```
 
 
-This tiny lirbrary gives you easy access to a number of **named entity disambiguation services**: [dpedia spotlight](https://dbpedia-spotlight.github.io/demo/), [Babelfy](http://babelfy.org/) or [Textrazor](https://www.textrazor.com/). We have just added a basic service for local *stanfordNER* via the [ner](https://www.npmjs.com/package/ner) node library.
-The public-eye "mapping service" translates each proprietary format to a common one; this means text annotation from multiple services.
+This tiny library gives you easy access to a number of **named entity disambiguation services**, including [dpedia spotlight](https://dbpedia-spotlight.github.io/demo/), [Babelfy](http://babelfy.org/) and [Textrazor](https://www.textrazor.com/). We have just added a basic service for local *stanfordNER* via the [ner](https://www.npmjs.com/package/ner) node library.
+The public-eye "mapping service" translates each proprietary format to a common format; this means you can annotate text using multiple services.
 
 ## Installation
 	npm install public-eye --save
