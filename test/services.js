@@ -32,23 +32,23 @@ describe('services:access', function() {
 
 
 describe('services:spotlight', function(){
-  // it('should check spotlight availability via web service', function(done){
-  //   if(!publicEye.settings.services.spotlight){
-  //     console.warn("  ... skipping, you didn't set spotlight credentials in `test/settings.local.js`")
-  //     done();
-  //     return;
-  //   }
-  //   this.timeout(10000);
+  it('should check spotlight availability via web service', function(done){
+    if(!publicEye.settings.services.spotlight){
+      console.warn("  ... skipping, you didn't set spotlight credentials in `test/settings.local.js`")
+      done();
+      return;
+    }
+    this.timeout(10000);
 
-  //   publicEye.spotlight({
-  //     text: text
-  //   }, function(err, body){
-  //     should.not.exist(err);
-  //     should.exist(body['@text'])
-  //     should.exist(body.Resources);
-  //     done();
-  //   });
-  // });
+    publicEye.spotlight({
+      text: text
+    }, function(err, body){
+      should.not.exist(err);
+      should.exist(body['@text'])
+      should.exist(body.Resources);
+      done();
+    });
+  });
   it('should map the spotlight object correctly', function(done){
     var s_ent = { 
       "@URI": "http://dbpedia.org/resource/Berlin",

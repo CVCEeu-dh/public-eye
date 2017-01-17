@@ -55,7 +55,7 @@ describe('helpers: annotate', function() {
         points: response.entities
       });
 
-      should.equal(annotated, 'First documented in the [13th](13) century, [Berlin](wiki-Berlin) was the capital of the [Kingdom of ](wiki-Kingdom_of_Prussia)[Prussia](wiki-Kingdom_of_Prussia,wiki-Prussia) (1701–1918), the [German Empire](wiki-German_Empire)')
+      should.equal(annotated, 'First documented in the [13th](13) century, [Berlin](wiki-Berlin) was the capital of the [Kingdom of ](wiki-Kingdom_of_Prussia)[Prussia](wiki-Kingdom_of_Prussia,wiki-Prussia) (1701–1918), the [German](wiki-Germany,wiki-German_Empire)[ Empire](wiki-German_Empire)')
       done();
     })
   });
